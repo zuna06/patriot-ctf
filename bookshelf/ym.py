@@ -48,7 +48,10 @@ try:
     # get address of puts
     pattern = r"0x[0-9a-f]+"
     puts_addr = re.findall(pattern, res.decode())[0]
-    print(puts_addr)
+    print(f"Address of `puts`: {puts_addr}")
+
+    def puts_offset(addr):
+        return hex(int(puts_addr, 16) + int(addr, 16))
 
     # Close the socket
     conn.close()

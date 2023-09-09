@@ -4,7 +4,15 @@ from time import sleep
 SLEEP_LEN = 0.5
 
 with open("steps.txt", "r") as file:
-    INIT_PROMPT = file.read()
+    fc = file.read().split("\n")
+
+    # filter out comment lines
+    fc = filter(lambda x: len(x) != 0 and x[0] != "#", fc)
+
+    fc = "\n".join(fc)
+    INIT_PROMPT = fc.replace("+", "\n")
+
+print(INIT_PROMPT)
 
 
 def connect():

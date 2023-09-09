@@ -1,14 +1,12 @@
 import socket
 from time import sleep
 
+# try "Giraffe"
+
 SLEEP_LEN = 0.1
-i = 1
 
 with open("animals.txt", "r") as file:
     for line in file:
-        print(i)
-        i += 1
-
         try:
             # Create a socket and connect to the server
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -18,9 +16,17 @@ with open("animals.txt", "r") as file:
             client_socket.send(line.encode())
 
             sleep(SLEEP_LEN)
-            # Receive and print the server's response
-            response = client_socket.recv(4096)
-            print(response.decode())
+
+            # get the second line
+            full_response = client_socket.recv(4096)
+            response = full_response.decode().split("\n")[1]
+
+            sus = "ERRR! Wrong!" not in response
+            sus_fmt = "SUS!" if sus else "fail:"
+
+            print(f"{sus_fmt} {line}")
+            if sus:
+                print(f"Full Response: {full_response}")
 
             # Close the socket
             client_socket.close()

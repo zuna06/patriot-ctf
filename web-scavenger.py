@@ -1,9 +1,9 @@
 parts = [
-    None,
+    "PCTF{Hunt",
     None,
     None,
     "R5_e49",
-    None,
+    "e4a541}",
 ]
 
 print("".join(parts))

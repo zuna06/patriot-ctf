@@ -1,6 +1,8 @@
 import socket
 from time import sleep
 
+URL = "chal.pctf.competitivecyber.club"
+PORT = 4444
 SLEEP_LEN = 0.5
 
 with open("steps.txt", "r") as file:
@@ -17,7 +19,7 @@ print(INIT_PROMPT)
 
 def connect():
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    client_socket.connect(("chal.pctf.competitivecyber.club", 4444))
+    client_socket.connect((URL, PORT))
 
     return client_socket
 
@@ -30,7 +32,7 @@ try:
     sleep(SLEEP_LEN)
 
     # get the second line
-    full_response = conn.recv(4096)
+    full_response = conn.recv(16384)
 
     print(full_response.decode())
 

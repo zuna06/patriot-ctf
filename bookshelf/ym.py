@@ -5,16 +5,17 @@ URL = "chal.pctf.competitivecyber.club"
 PORT = 4444
 SLEEP_LEN = 0.5
 
-with open("steps.txt", "r") as file:
-    fc = file.read().split("\n")
 
-    # filter out comment lines
-    fc = filter(lambda x: len(x) != 0 and x[0] != "#", fc)
+def parse_steps(fname: str):
+    with open(fname, "r") as file:
+        fc = file.read().split("\n")
 
-    fc = "\n".join(fc)
-    INIT_PROMPT = fc.replace("+", "\n")
+        # filter out comment lines
+        fc = filter(lambda x: len(x) != 0 and x[0] != "#", fc)
+        fc = "\n".join(fc)
 
-print(INIT_PROMPT)
+        # plus signs = inline newlines
+        return fc.replace("+", "\n")
 
 
 def connect():
@@ -24,17 +25,24 @@ def connect():
     return client_socket
 
 
+def send(msg: str):
+    conn.send(msg.encode())
+
+
+def run_steps(steps: str):
+    steps = parse_steps(steps)
+
+    send(steps)
+    sleep(SLEEP_LEN)
+    return conn.recv(16384)
+
+
 try:
     conn = connect()
 
-    # Send the current line to the server
-    conn.send(INIT_PROMPT.encode())
-    sleep(SLEEP_LEN)
-
-    # get the second line
-    full_response = conn.recv(16384)
-
-    print(full_response.decode())
+    # get balance to underflow
+    res = run_steps("1_spam_tips.txt")
+    print(res.decode())
 
     # Close the socket
     conn.close()

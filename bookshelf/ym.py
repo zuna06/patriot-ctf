@@ -1,4 +1,4 @@
-import socket
+import socket, re
 from time import sleep
 
 URL = "chal.pctf.competitivecyber.club"
@@ -44,7 +44,11 @@ try:
     run_steps("1_spam_tips.txt")
 
     res = run_steps("2_find_puts.txt")
-    print(res.decode())
+
+    # get address of puts
+    pattern = r"0x[0-9a-f]+"
+    puts_addr = re.findall(pattern, res.decode())[0]
+    print(puts_addr)
 
     # Close the socket
     conn.close()

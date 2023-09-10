@@ -41,15 +41,11 @@ def compile(in_data):
     # stage 1
     char_xor = [chr(ord(v) ^ i) for i, v in enumerate(backwards)]
     z = "".join(x for x in char_xor)
-
-    alphabet = list("abcdefghijklmnopqrstuvwxyz")
-    for y in range(len(z)):
-        alphabet[y % 26] = chr((ord(z[y]) ^ ord(char_xor[y])) + 26)
-    print("Stage 1 complete")
+    print(f"Stage 1 complete: {bytes(z, 'utf-8')}")
 
     # stage 2
     t = "".join([chr(ord(z[q]) - random_seq.pop(0)) for q in range(len(z))])
-    print("Stage 2 complete")
+    print(f"Stage 2 complete: {bytes(t, 'utf-8')}")
 
     # stage 3
     wtf = list(t)
@@ -57,27 +53,54 @@ def compile(in_data):
     wtf = "".join(g for g in wtf)
 
 
-def decompile(flag: str):
+def dc1(flag):
+    return flag
+
+
+def dc2(flag):
+    return flag
+
+
+def dc3(flag: str):
     print("Final Stage decrypting...")
 
-    h = LEN_CIPHERTEXT - 1
     # len wtf is the same as len ciphertext
     # we want to find the value of `wtf` so
     # we can go back to stage 2
-    # while h >= 0:
-    #     try:
-    #         flag += wtf[h + 1] + wtf[h]
-    #     except:
-    #         flag += wtf[h]
-    #     h -= 2
+    temp_wtf = list(flag)
+    temp_wtf.reverse()
+    # have:   b"]`u Drvd]Fb\x7f*ftR^"
+    # expect: b"]u`D vr]dbF*\x7ftf^R"
+
+    # swap every 2 chars with each other
+    wtf = []
+    h = -1
+    while h < len(temp_wtf):
+        try:
+            wtf += temp_wtf[h + 1] + temp_wtf[h]
+        except:
+            wtf += temp_wtf[h]
+        h += 2
+
+    return wtf
+
+
+def decompile(flag: str):
+    return dc1(dc2(dc3(flag)))
 
 
 def unit_test():
-    pass
+    ciph = b"^Rtf*\x7fbF]dvrD u`]"
+    ciph = dc3(ciph.decode("utf-8"))
+
+    assert ciph == b"]u`D vr]dbF*\x7ftf^R", f"got {''.join(ciph)}"
+
     # mhqjf % brc_rsv
 
 
 if __name__ == "__main__":
+    unit_test()
+
     print("Length of ciphertext: ", LEN_CIPHERTEXT)
 
     plaintext = decompile(CIPHERTEXT)

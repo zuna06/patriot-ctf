@@ -58,7 +58,7 @@ def compile(in_data):
             flag += wtf[h]
         h += 2
 
-    print("Final Stage complete")
+    print(f"Final Stage complete: {bytes(flag, 'utf-8')}")
     return flag
 
 

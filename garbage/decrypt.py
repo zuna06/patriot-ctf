@@ -44,21 +44,28 @@ def compile(in_data):
     print(f"Stage 1 complete: {bytes(z, 'utf-8')}")
 
     # stage 2
-    t = "".join([chr(ord(z[q]) - random_seq.pop(0)) for q in range(len(z))])
-    print(f"Stage 2 complete: {bytes(t, 'utf-8')}")
-
-    # stage 3
-    wtf = list(t)
-    wtf.reverse()
-    wtf = "".join(g for g in wtf)
 
 
 def dc1(flag):
     return flag
 
 
-def dc2(flag):
-    return flag
+def dc2(t):
+    # get output of stage 1 from t
+    # they're both strings...
+
+    res = ""
+    # need: b"aucG$vs`gdK+\x7fxi`R"
+
+    # for q in range(len(t)):
+    #     t += chr(ord(res[q]) - random_seq.pop(0))
+
+    # certified math class moment...
+    # i love composition of functions :)
+    for q in range(len(t)):
+        res += chr(ord(t[q]) + random_seq[q])
+
+    return bytes(res, "utf-8")
 
 
 def dc3(flag: str):

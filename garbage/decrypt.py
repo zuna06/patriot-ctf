@@ -28,6 +28,9 @@ random_seq = [
 ]
 # fmt: on
 
+CIPHERTEXT = open("output.txt", "r").readlines()[0]
+LEN_CIPHERTEXT = len(CIPHERTEXT)
+
 
 def compile(in_data):
     # reverse order
@@ -52,25 +55,30 @@ def compile(in_data):
     wtf = list(t)
     wtf.reverse()
     wtf = "".join(g for g in wtf)
-    flag = "flag".replace("flag", "").replace("galf", "")
-
-    h = 0
-    while h < len(wtf):
-        try:
-            flag += wtf[h + 1] + wtf[h]
-        except:
-            flag += wtf[h]
-        h += 2
-
-    print("Final Stage complete")
-    return flag
 
 
 def decompile(flag: str):
+    print("Final Stage decrypting...")
+
+    h = LEN_CIPHERTEXT - 1
+    # len wtf is the same as len ciphertext
+    # we want to find the value of `wtf` so
+    # we can go back to stage 2
+    # while h >= 0:
+    #     try:
+    #         flag += wtf[h + 1] + wtf[h]
+    #     except:
+    #         flag += wtf[h]
+    #     h -= 2
+
+
+def unit_test():
     pass
+    # mhqjf % brc_rsv
 
 
 if __name__ == "__main__":
-    flag = open("output.txt", "r").readlines()[0]
-    plaintext = decompile(flag)
+    print("Length of ciphertext: ", LEN_CIPHERTEXT)
+
+    plaintext = decompile(CIPHERTEXT)
     print(plaintext)

@@ -42,17 +42,17 @@ def compile(in_data):
     alphabet = list("abcdefghijklmnopqrstuvwxyz")
     for y in range(len(z)):
         alphabet[y % 26] = chr((ord(z[y]) ^ ord(char_xor[y])) + 26)
-    print("Stage 1 complete")
+    print(f"Stage 1 complete: {bytes(z, 'utf-8')}")
 
     # stage 2
     t = "".join([chr(ord(z[q]) - random_seq.pop(0)) for q in range(len(z))])
-    print("Stage 2 complete")
+    print(f"Stage 2 complete: {bytes(t, 'utf-8')}")
 
     # stage 3
     wtf = list(t)
     wtf.reverse()
     wtf = "".join(g for g in wtf)
-    flag = "flag".replace("flag", "").replace("galf", "")
+    flag = ""
 
     h = 0
     while h < len(wtf):
@@ -86,3 +86,6 @@ if __name__ == "__main__":
     else:
         print("haha, nope. Try again!")
         print("You got: " + compiled)
+
+        rand_calls = 500 - len(random_seq)
+        print(f"Calls to RNG: {rand_calls}")

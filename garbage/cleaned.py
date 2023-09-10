@@ -38,10 +38,6 @@ def compile(in_data):
     # stage 1
     char_xor = [chr(ord(v) ^ i) for i, v in enumerate(backwards)]
     z = "".join(x for x in char_xor)
-
-    alphabet = list("abcdefghijklmnopqrstuvwxyz")
-    for y in range(len(z)):
-        alphabet[y % 26] = chr((ord(z[y]) ^ ord(char_xor[y])) + 26)
     print(f"Stage 1 complete: {bytes(z, 'utf-8')}")
 
     # stage 2

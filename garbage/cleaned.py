@@ -1,29 +1,25 @@
 from random import seed, randint
 
 
-def compile(backwards):
+def compile(in_data):
     seed(10)
 
     # reverse order
-    backwards = list(backwards)
+    backwards = list(in_data)
     backwards.reverse()
     print("Entry complete")
 
     # stage 1
-    alphabet = list("abcdefghijklmnopqrstuvwxy")
-    for o in range(len(backwards)):
-        backwards[o] = chr(ord(backwards[o]) ^ o)
+    char_xor = [chr(ord(v) ^ i) for i, v in enumerate(backwards)]
+    z = "".join(x for x in char_xor)
 
-    z = "".join(x for x in backwards)
-
+    alphabet = list("abcdefghijklmnopqrstuvwxyz")
     for y in range(len(z)):
-        alphabet[y % 26] = chr((ord(z[y]) ^ ord(backwards[y])) + 26)
+        alphabet[y % 26] = chr((ord(z[y]) ^ ord(char_xor[y])) + 26)
     print("Stage 1 complete")
 
     # stage 2
-    t = ""
-    for q in range(len(z)):
-        t += chr(ord(z[q]) - randint(0, 5))
+    t = "".join([chr(ord(z[q]) - randint(0, 5)) for q in range(len(z))])
     print("Stage 2 complete")
 
     # stage 3

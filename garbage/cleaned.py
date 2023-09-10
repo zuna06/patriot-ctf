@@ -1,38 +1,23 @@
-import string
 from random import seed, randint
 
 
-def finalstage(w):
-    h = 0
-    w = list(w)
-    w.reverse()
-    w = "".join(g for g in w)
-    flag = "flag".replace("flag", "galf").replace("galf", "")
-    while h < len(w):
-        try:
-            flag += w[h + 1] + w[h]
-        except:
-            flag += w[h]
-        h += 2
-    print("Final Stage complete")
-    return flag
-
-
-def compile(f):
+def compile(backwards):
     seed(10)
-    f = list(f)
-    f.reverse()
-    f = "".join(i for i in f)
+
+    # reverse order
+    backwards = list(backwards)
+    backwards.reverse()
     print("Entry complete")
 
     # stage 1
-    f = list(f)
-    b = list(string.ascii_lowercase)
-    for o in range(len(f)):
-        f[o] = chr(ord(f[o]) ^ o)
-    z = "".join(x for x in f)
+    alphabet = list("abcdefghijklmnopqrstuvwxy")
+    for o in range(len(backwards)):
+        backwards[o] = chr(ord(backwards[o]) ^ o)
+
+    z = "".join(x for x in backwards)
+
     for y in range(len(z)):
-        b[y % len(b)] = chr((ord(z[y]) ^ ord(f[y])) + len(b))
+        alphabet[y % 26] = chr((ord(z[y]) ^ ord(backwards[y])) + 26)
     print("Stage 1 complete")
 
     # stage 2
@@ -40,7 +25,21 @@ def compile(f):
     for q in range(len(z)):
         t += chr(ord(z[q]) - randint(0, 5))
     print("Stage 2 complete")
-    flag = finalstage(t)
+
+    # stage 3
+    h = 0
+    t = list(t)
+    t.reverse()
+    t = "".join(g for g in t)
+    flag = "flag".replace("flag", "galf").replace("galf", "")
+    while h < len(t):
+        try:
+            flag += t[h + 1] + t[h]
+        except:
+            flag += t[h]
+        h += 2
+    print("Final Stage complete")
+
     return flag
 
 

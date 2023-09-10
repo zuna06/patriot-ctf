@@ -18,35 +18,29 @@ def finalstage(w):
     return flag
 
 
-def stage2(b):
-    t = ""
-    for q in range(len(b)):
-        t += chr(ord(b[q]) - randint(0, 5))
-    print("Stage 2 complete")
-    flag = finalstage(t)
-    return flag
-
-
-def stage1(a):
-    a = list(a)
-    b = list(string.ascii_lowercase)
-    for o in range(len(a)):
-        a[o] = chr(ord(a[o]) ^ o)
-    z = "".join(x for x in a)
-    for y in range(len(z)):
-        b[y % len(b)] = chr((ord(z[y]) ^ ord(a[y])) + len(b))
-    print("Stage 1 complete")
-    flag = stage2(z)
-    return flag
-
-
 def compile(f):
     seed(10)
     f = list(f)
     f.reverse()
     f = "".join(i for i in f)
     print("Entry complete")
-    flag = stage1(f)
+
+    # stage 1
+    f = list(f)
+    b = list(string.ascii_lowercase)
+    for o in range(len(f)):
+        f[o] = chr(ord(f[o]) ^ o)
+    z = "".join(x for x in f)
+    for y in range(len(z)):
+        b[y % len(b)] = chr((ord(z[y]) ^ ord(f[y])) + len(b))
+    print("Stage 1 complete")
+
+    # stage 2
+    t = ""
+    for q in range(len(z)):
+        t += chr(ord(z[q]) - randint(0, 5))
+    print("Stage 2 complete")
+    flag = finalstage(t)
     return flag
 
 

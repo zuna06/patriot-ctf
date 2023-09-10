@@ -65,16 +65,7 @@ def dc3(flag: str):
     print("Final Stage decrypting...")
 
     # len wtf is the same as len ciphertext
-    # we want to find the value of `wtf` so
-    # we can go back to stage 2
     temp_wtf = list(flag)
-    # temp_wtf.reverse()
-    # have: b"]`u Drvd]Fb\x7f*ftR^"
-    # need: b"]u`D vr]dbF*\x7ftf^R"
-
-    # NON REVERSED:
-    # have: b"^Rtf*\x7fbF]dvrD u`]"
-    # need: b'R^ft\x7f*Fbd]rv D`u]'
 
     # swap every 2 chars with each other
     wtf = []
@@ -102,7 +93,8 @@ def unit_test():
 
     assert ciph == b"]u`D vr]dbF*\x7ftf^R", f"got {ciph}"
 
-    # mhqjf % brc_rsv
+    ciph = dc2(ciph.decode("utf-8"))
+    assert ciph == b"aucG$vs`gdK+\x7fxi`R", f"got {ciph}"
 
 
 if __name__ == "__main__":

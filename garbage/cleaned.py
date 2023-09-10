@@ -33,7 +33,9 @@ def compile(in_data):
     # reverse order
     backwards = list(in_data)
     backwards.reverse()
-    print("Entry complete")
+    # backwards as bytes
+    joined = "".join(x for x in backwards)
+    print(f"Entry complete: {bytes(joined, 'utf-8')}")
 
     # stage 1
     char_xor = [chr(ord(v) ^ i) for i, v in enumerate(backwards)]

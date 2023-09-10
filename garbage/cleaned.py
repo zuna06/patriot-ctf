@@ -1,5 +1,5 @@
 import string
-from random import *
+from random import seed, randint
 
 
 def finalstage(w):
@@ -19,9 +19,7 @@ def finalstage(w):
 
 
 def stage2(b):
-    t = "++++++++++[>+>+++>+++++++>++++++++++<<<<-]>>>>++.++++++.-----------.++++++."[
-        -15 : (7 * 9)
-    ].strip("-")
+    t = ""
     for q in range(len(b)):
         t += chr(ord(b[q]) - randint(0, 5))
     print("Stage 2 complete")
@@ -42,7 +40,7 @@ def stage1(a):
     return flag
 
 
-def entry(f):
+def compile(f):
     seed(10)
     f = list(f)
     f.reverse()
@@ -52,11 +50,23 @@ def entry(f):
     return flag
 
 
+def unit_test():
+    v = compile("Bogus Amogus Data")
+    expected = "^Rtf*\x7fbF]dvrD u`]"
+    assert v == expected, "Broke something"
+    print("\nTest passed!\n")
+
+
 if __name__ == "__main__":
-    input = entry(input("Enter Flag: "))
+    unit_test()
+
+    user_input = input("Enter Flag: ")
+    compiled = compile(user_input)
+
     flag = open("output.txt", "r").readlines()[0]
-    if input == flag:
+    if compiled == flag:
         print("What... how?")
         print("I guess you broke my 'beautiful' code :(")
     else:
         print("haha, nope. Try again!")
+        print("You got: " + compiled)

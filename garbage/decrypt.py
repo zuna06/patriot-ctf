@@ -68,21 +68,28 @@ def dc3(flag: str):
     # we want to find the value of `wtf` so
     # we can go back to stage 2
     temp_wtf = list(flag)
-    temp_wtf.reverse()
-    # have:   b"]`u Drvd]Fb\x7f*ftR^"
-    # expect: b"]u`D vr]dbF*\x7ftf^R"
+    # temp_wtf.reverse()
+    # have: b"]`u Drvd]Fb\x7f*ftR^"
+    # need: b"]u`D vr]dbF*\x7ftf^R"
+
+    # NON REVERSED:
+    # have: b"^Rtf*\x7fbF]dvrD u`]"
+    # need: b'R^ft\x7f*Fbd]rv D`u]'
 
     # swap every 2 chars with each other
     wtf = []
-    h = -1
+    h = 0
     while h < len(temp_wtf):
         try:
-            wtf += temp_wtf[h + 1] + temp_wtf[h]
+            first = bytes(temp_wtf[h], "utf-8")
+            second = bytes(temp_wtf[h + 1], "utf-8")
+            wtf += second + first
         except:
-            wtf += temp_wtf[h]
+            wtf += bytes(temp_wtf[h], "utf-8")
         h += 2
 
-    return wtf
+    wtf.reverse()
+    return bytes(wtf)
 
 
 def decompile(flag: str):
@@ -93,7 +100,7 @@ def unit_test():
     ciph = b"^Rtf*\x7fbF]dvrD u`]"
     ciph = dc3(ciph.decode("utf-8"))
 
-    assert ciph == b"]u`D vr]dbF*\x7ftf^R", f"got {''.join(ciph)}"
+    assert ciph == b"]u`D vr]dbF*\x7ftf^R", f"got {ciph}"
 
     # mhqjf % brc_rsv
 

@@ -18,6 +18,12 @@ with open("Binary.txt", "r") as f:
 
 counts = count_seq(bintxt)
 
+# check divisibility by 3 (kinda a reach)
 divis = [(x % 3 == 0) for x in counts]
 divis_fmt = "".join(["1" if x else "0" for x in divis])
-print(divis_fmt)
+# print(divis_fmt)
+
+# the thing CJ suggested
+binl = [bin(x)[2:] if x > 1 else str(x) for x in counts]
+binl_fmt = "".join(str(x) for x in binl)
+# print(binl_fmt)

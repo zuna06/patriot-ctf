@@ -1,20 +1,23 @@
-def simplify_string(input_str):
-    simplified_str = ""
+def count_seq(input_str):
+    res = []
     count = 1
 
     for i in range(1, len(input_str)):
         if input_str[i] == input_str[i - 1]:
             count += 1
         else:
-            simplified_str += str(count) + " "
+            res.append(count)
             count = 1
 
-    simplified_str += str(count)
-    return simplified_str
+    res.append(count)
+    return res
 
 
 with open("Binary.txt", "r") as f:
-    input_str = f.read()
+    bintxt = f.read()
 
-simplified_result = simplify_string(input_str)
-print(simplified_result)
+counts = count_seq(bintxt)
+
+divis = [(x % 3 == 0) for x in counts]
+divis_fmt = "".join(["1" if x else "0" for x in divis])
+print(divis_fmt)

@@ -90,7 +90,13 @@ def dc3(flag: str):
 
 
 def decompile(flag: str):
-    return dc1(dc2(dc3(flag)))
+    _3 = dc3(flag).decode("utf-8")
+    _2 = dc2(_3).decode("utf-8")
+    _1 = dc1(_2)
+
+    res = list(_1)
+    res.reverse()
+    return bytes(res).decode("utf-8")
 
 
 def unit_test():
@@ -107,7 +113,7 @@ def unit_test():
 
 
 if __name__ == "__main__":
-    unit_test()
+    # unit_test()
 
     print("Length of ciphertext: ", LEN_CIPHERTEXT)
 
